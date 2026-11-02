@@ -1,0 +1,212 @@
+[
+  {
+    "task": "1. Категории",
+    "sql": "SELECT id,name FROM category ORDER BY id",
+    "columns": [
+      "id",
+      "name"
+    ],
+    "rows": [
+      [
+        1,
+        "Еда"
+      ],
+      [
+        2,
+        "Быт"
+      ]
+    ]
+  },
+  {
+    "task": "2–3. Товары с категориями",
+    "sql": "SELECT p.id,p.name,p.price,c.name AS category,p.created FROM product p JOIN category c ON c.id=p.category_id ORDER BY p.id",
+    "columns": [
+      "id",
+      "name",
+      "price",
+      "category",
+      "created"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        40.0,
+        "Еда",
+        "2026-10-30"
+      ],
+      [
+        2,
+        "Молоко",
+        60.0,
+        "Еда",
+        "2026-10-30"
+      ],
+      [
+        3,
+        "Мыло",
+        80.0,
+        "Быт",
+        "2026-10-30"
+      ],
+      [
+        4,
+        "Сыр",
+        200.0,
+        "Еда",
+        "2026-10-30"
+      ]
+    ]
+  },
+  {
+    "task": "4. Количество записей в category и product",
+    "sql": "SELECT 'category' AS table_name,COUNT(*) AS records FROM category UNION ALL SELECT 'product',COUNT(*) FROM product",
+    "columns": [
+      "table_name",
+      "records"
+    ],
+    "rows": [
+      [
+        "category",
+        2
+      ],
+      [
+        "product",
+        4
+      ]
+    ]
+  },
+  {
+    "task": "6. Поставщики",
+    "sql": "SELECT id,name,phone,email FROM supplier ORDER BY id",
+    "columns": [
+      "id",
+      "name",
+      "phone",
+      "email"
+    ],
+    "rows": [
+      [
+        1,
+        "ООО Продукты",
+        "111-11-11",
+        "food@example.test"
+      ],
+      [
+        2,
+        "ООО Хозтовары",
+        "222-22-22",
+        "home@example.test"
+      ]
+    ]
+  },
+  {
+    "task": "7. Поставки",
+    "sql": "SELECT sh.id,p.name AS product,s.name AS supplier,sh.quantity,sh.shipment_date FROM shipment sh JOIN product p ON p.id=sh.product_id JOIN supplier s ON s.id=sh.supplier_id ORDER BY sh.id",
+    "columns": [
+      "id",
+      "product",
+      "supplier",
+      "quantity",
+      "shipment_date"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        "ООО Продукты",
+        100,
+        "2026-10-30"
+      ],
+      [
+        2,
+        "Молоко",
+        "ООО Продукты",
+        50,
+        "2026-10-30"
+      ],
+      [
+        3,
+        "Мыло",
+        "ООО Хозтовары",
+        30,
+        "2026-10-30"
+      ],
+      [
+        4,
+        "Сыр",
+        "ООО Хозтовары",
+        10,
+        "2026-10-30"
+      ]
+    ]
+  },
+  {
+    "task": "7. Проверка даты по умолчанию",
+    "sql": "SELECT id,shipment_date,shipment_date=CURRENT_DATE AS date_is_today FROM shipment ORDER BY id",
+    "columns": [
+      "id",
+      "shipment_date",
+      "date_is_today"
+    ],
+    "rows": [
+      [
+        1,
+        "2026-10-30",
+        1
+      ],
+      [
+        2,
+        "2026-10-30",
+        1
+      ],
+      [
+        3,
+        "2026-10-30",
+        1
+      ],
+      [
+        4,
+        "2026-10-30",
+        1
+      ]
+    ]
+  },
+  {
+    "task": "8. Составной UNIQUE",
+    "sql": "SELECT name,\"unique\" FROM pragma_index_list('shipment') WHERE \"unique\"=1",
+    "columns": [
+      "name",
+      "unique"
+    ],
+    "rows": [
+      [
+        "sqlite_autoindex_shipment_1",
+        1
+      ]
+    ]
+  },
+  {
+    "task": "9. Определение CHECK даты",
+    "sql": "SELECT sql FROM sqlite_master WHERE type='table' AND name='shipment'",
+    "columns": [
+      "sql"
+    ],
+    "rows": [
+      [
+        "CREATE TABLE shipment (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    product_id INTEGER NOT NULL,\n    supplier_id INTEGER NOT NULL,\n    quantity INTEGER NOT NULL CHECK (quantity > 0),\n    shipment_date TEXT NOT NULL DEFAULT CURRENT_DATE\n        CHECK (shipment_date >= '2020-01-01'),\n    FOREIGN KEY (product_id) REFERENCES product(id),\n    FOREIGN KEY (supplier_id) REFERENCES supplier(id),\n    UNIQUE (product_id, supplier_id)\n)"
+      ]
+    ]
+  },
+  {
+    "task": "Проверка внешних ключей",
+    "sql": "PRAGMA foreign_key_check",
+    "columns": [
+      "table",
+      "rowid",
+      "parent",
+      "fkid"
+    ],
+    "rows": []
+  }
+]

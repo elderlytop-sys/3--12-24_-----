@@ -1,0 +1,78 @@
+[
+  {
+    "check": "CHECK product.price > 0",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "CHECK constraint failed: price > 0"
+  },
+  {
+    "check": "UNIQUE category.name",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "UNIQUE constraint failed: category.name"
+  },
+  {
+    "check": "FOREIGN KEY product.category_id",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "FOREIGN KEY constraint failed"
+  },
+  {
+    "check": "UNIQUE supplier.phone",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "UNIQUE constraint failed: supplier.phone"
+  },
+  {
+    "check": "UNIQUE supplier.email",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "UNIQUE constraint failed: supplier.email"
+  },
+  {
+    "check": "CHECK shipment.quantity > 0",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "CHECK constraint failed: quantity > 0"
+  },
+  {
+    "check": "FOREIGN KEY shipment.product_id",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "FOREIGN KEY constraint failed"
+  },
+  {
+    "check": "FOREIGN KEY shipment.supplier_id",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "FOREIGN KEY constraint failed"
+  },
+  {
+    "check": "UNIQUE shipment(product_id, supplier_id)",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "UNIQUE constraint failed: shipment.product_id, shipment.supplier_id"
+  },
+  {
+    "check": "CHECK shipment.shipment_date >= 2020-01-01",
+    "status": "PASS",
+    "expected": "ошибка ограничения",
+    "actual": "CHECK constraint failed: shipment_date >= '2020-01-01'"
+  },
+  {
+    "check": "Корректная ссылка product.category_id = 1",
+    "status": "PASS",
+    "expected": "успешная вставка",
+    "actual": "успешно"
+  },
+  {
+    "check": "PRAGMA integrity_check",
+    "status": "PASS",
+    "actual": "ok"
+  },
+  {
+    "check": "PRAGMA foreign_key_check",
+    "status": "PASS",
+    "actual": "нарушений нет"
+  }
+]

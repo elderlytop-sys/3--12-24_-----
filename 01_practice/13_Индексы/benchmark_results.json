@@ -1,0 +1,35 @@
+{
+  "sqlite_version": "3.53.1",
+  "rows": 100000,
+  "query": "SELECT SUM(price) FROM product WHERE price>=9990",
+  "without_index": {
+    "plan": [
+      [
+        3,
+        0,
+        216,
+        "SCAN product"
+      ]
+    ],
+    "median_ms": 3.424306500022567,
+    "minimum_ms": 3.016039999977238,
+    "result": 999450.0,
+    "repetitions": 40
+  },
+  "with_index": {
+    "plan": [
+      [
+        3,
+        0,
+        190,
+        "SEARCH product USING COVERING INDEX idx_bench_price (price>?)"
+      ]
+    ],
+    "median_ms": 0.006004999988817872,
+    "minimum_ms": 0.0057550000178707705,
+    "result": 999450.0,
+    "repetitions": 40
+  },
+  "speedup": 570.2425489423968,
+  "note": "Реальный замер текущей среды, в памяти; время построения индекса не включено, ускорение зависит от данных и запроса."
+}

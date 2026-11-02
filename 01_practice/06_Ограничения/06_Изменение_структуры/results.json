@@ -1,0 +1,378 @@
+[
+  {
+    "task": "1. Добавление description",
+    "sql": "ALTER TABLE product ADD COLUMN description TEXT",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Проверка 1",
+    "sql": "PRAGMA table_info(product)",
+    "columns": [
+      "cid",
+      "name",
+      "type",
+      "notnull",
+      "dflt_value",
+      "pk"
+    ],
+    "rows": [
+      [
+        0,
+        "id",
+        "INTEGER",
+        0,
+        null,
+        1
+      ],
+      [
+        1,
+        "name",
+        "TEXT",
+        0,
+        null,
+        0
+      ],
+      [
+        2,
+        "price",
+        "TEXT",
+        0,
+        null,
+        0
+      ],
+      [
+        3,
+        "description",
+        "TEXT",
+        0,
+        null,
+        0
+      ]
+    ]
+  },
+  {
+    "task": "2. name → title",
+    "sql": "ALTER TABLE product RENAME COLUMN name TO title",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Проверка 2",
+    "sql": "PRAGMA table_info(product)",
+    "columns": [
+      "cid",
+      "name",
+      "type",
+      "notnull",
+      "dflt_value",
+      "pk"
+    ],
+    "rows": [
+      [
+        0,
+        "id",
+        "INTEGER",
+        0,
+        null,
+        1
+      ],
+      [
+        1,
+        "title",
+        "TEXT",
+        0,
+        null,
+        0
+      ],
+      [
+        2,
+        "price",
+        "TEXT",
+        0,
+        null,
+        0
+      ],
+      [
+        3,
+        "description",
+        "TEXT",
+        0,
+        null,
+        0
+      ]
+    ]
+  },
+  {
+    "task": "3. Удаление description",
+    "sql": "ALTER TABLE product DROP COLUMN description",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Проверка 3",
+    "sql": "PRAGMA table_info(product)",
+    "columns": [
+      "cid",
+      "name",
+      "type",
+      "notnull",
+      "dflt_value",
+      "pk"
+    ],
+    "rows": [
+      [
+        0,
+        "id",
+        "INTEGER",
+        0,
+        null,
+        1
+      ],
+      [
+        1,
+        "title",
+        "TEXT",
+        0,
+        null,
+        0
+      ],
+      [
+        2,
+        "price",
+        "TEXT",
+        0,
+        null,
+        0
+      ]
+    ]
+  },
+  {
+    "task": "4. category → categories",
+    "sql": "ALTER TABLE category RENAME TO categories",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "5. Удаление product",
+    "sql": "DROP TABLE product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Подготовка независимых задач 6–9 после удаления",
+    "sql": "CREATE TABLE product(id INTEGER PRIMARY KEY,title TEXT,price TEXT)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Учебные данные для задач 6–9",
+    "sql": "INSERT INTO product VALUES(1,'Хлеб','40'),(2,'Мыло','80'),(3,'Молоко','60'),(4,'Сыр','200'),(5,'Чай','150')",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Начало пересоздания для DEFAULT",
+    "sql": "SAVEPOINT add_created",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Новая структура с DEFAULT",
+    "sql": "CREATE TABLE product_dated(id INTEGER PRIMARY KEY,title TEXT,price TEXT,created TEXT DEFAULT(date('now')))",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Копирование, дата заполняется автоматически",
+    "sql": "INSERT INTO product_dated(id,title,price) SELECT id,title,price FROM product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Удаление прежней таблицы",
+    "sql": "DROP TABLE product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Переименование",
+    "sql": "ALTER TABLE product_dated RENAME TO product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Фиксация",
+    "sql": "RELEASE add_created",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Проверка",
+    "sql": "SELECT * FROM product",
+    "columns": [
+      "id",
+      "title",
+      "price",
+      "created"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        "40",
+        "2026-10-30"
+      ],
+      [
+        2,
+        "Мыло",
+        "80",
+        "2026-10-30"
+      ],
+      [
+        3,
+        "Молоко",
+        "60",
+        "2026-10-30"
+      ],
+      [
+        4,
+        "Сыр",
+        "200",
+        "2026-10-30"
+      ],
+      [
+        5,
+        "Чай",
+        "150",
+        "2026-10-30"
+      ]
+    ]
+  },
+  {
+    "task": "7–9*. Начало пересоздания с сохранением данных",
+    "sql": "SAVEPOINT change_type",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Новый тип price",
+    "sql": "CREATE TABLE product_real(id INTEGER PRIMARY KEY,title TEXT,price REAL,created TEXT DEFAULT(date('now')))",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Копирование с CAST",
+    "sql": "INSERT INTO product_real SELECT id,title,CAST(price AS REAL),created FROM product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Удаление старой таблицы",
+    "sql": "DROP TABLE product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Переименование",
+    "sql": "ALTER TABLE product_real RENAME TO product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "8. Таблица с CHECK",
+    "sql": "CREATE TABLE product_checked(id INTEGER PRIMARY KEY,title TEXT,price REAL CHECK(price>=0),created TEXT DEFAULT(date('now')))",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "8. Копирование",
+    "sql": "INSERT INTO product_checked SELECT * FROM product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "8. Удаление",
+    "sql": "DROP TABLE product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "8. Переименование",
+    "sql": "ALTER TABLE product_checked RENAME TO product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "9*. Фиксация",
+    "sql": "RELEASE change_type",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7–9. Проверка типа и данных",
+    "sql": "SELECT *,typeof(price) AS price_type FROM product",
+    "columns": [
+      "id",
+      "title",
+      "price",
+      "created",
+      "price_type"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        40.0,
+        "2026-10-30",
+        "real"
+      ],
+      [
+        2,
+        "Мыло",
+        80.0,
+        "2026-10-30",
+        "real"
+      ],
+      [
+        3,
+        "Молоко",
+        60.0,
+        "2026-10-30",
+        "real"
+      ],
+      [
+        4,
+        "Сыр",
+        200.0,
+        "2026-10-30",
+        "real"
+      ],
+      [
+        5,
+        "Чай",
+        150.0,
+        "2026-10-30",
+        "real"
+      ]
+    ]
+  },
+  {
+    "task": "Предсказание: добавление нового столбца",
+    "sql": "ALTER TABLE product ADD COLUMN new_col TEXT",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Предсказание: число строк",
+    "sql": "SELECT COUNT(*) AS count_rows FROM product",
+    "columns": [
+      "count_rows"
+    ],
+    "rows": [
+      [
+        5
+      ]
+    ]
+  }
+]

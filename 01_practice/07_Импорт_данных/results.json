@@ -1,0 +1,218 @@
+[
+  {
+    "task": "Импорт products_5.csv",
+    "rows_loaded": 5
+  },
+  {
+    "task": "4. Приведение типов",
+    "sql": "INSERT INTO product(name,price,category_id) SELECT TRIM(name),CAST(price AS REAL),CAST(category_id AS INTEGER) FROM tmp_product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "5. Проверка",
+    "sql": "SELECT *,typeof(price) AS price_type FROM product",
+    "columns": [
+      "id",
+      "name",
+      "price",
+      "category_id",
+      "price_type"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        40.0,
+        1,
+        "real"
+      ],
+      [
+        2,
+        "Молоко",
+        60.0,
+        1,
+        "real"
+      ],
+      [
+        3,
+        "Мыло",
+        80.0,
+        2,
+        "real"
+      ],
+      [
+        4,
+        "Сыр",
+        200.0,
+        1,
+        "real"
+      ],
+      [
+        5,
+        "Чай",
+        150.0,
+        1,
+        "real"
+      ]
+    ]
+  },
+  {
+    "task": "6. Удаление временной таблицы",
+    "sql": "DROP TABLE tmp_product",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Подготовка грязных данных",
+    "sql": "CREATE TABLE tmp_dirty(name TEXT,price TEXT,category_id TEXT)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Импорт dirty.csv",
+    "rows_loaded": 3
+  },
+  {
+    "task": "7. Очистка TRIM/LOWER",
+    "sql": "CREATE TABLE cleaned AS SELECT LOWER(TRIM(name)) AS name,CAST(TRIM(price) AS REAL) AS price,CAST(TRIM(category_id) AS INTEGER) AS category_id FROM tmp_dirty",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Проверка очистки",
+    "sql": "SELECT * FROM cleaned",
+    "columns": [
+      "name",
+      "price",
+      "category_id"
+    ],
+    "rows": [
+      [
+        "milk",
+        60.0,
+        1
+      ],
+      [
+        "bread",
+        40.0,
+        1
+      ],
+      [
+        "soap",
+        80.0,
+        2
+      ]
+    ]
+  },
+  {
+    "task": "8. Отдельная таблица десяти записей",
+    "sql": "CREATE TABLE ten_products(name TEXT,price REAL,category_id INTEGER)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Импорт products_10.csv",
+    "rows_loaded": 10
+  },
+  {
+    "task": "8. Проверка количества",
+    "sql": "SELECT COUNT(*) AS loaded FROM ten_products",
+    "columns": [
+      "loaded"
+    ],
+    "rows": [
+      [
+        10
+      ]
+    ]
+  },
+  {
+    "task": "9. Подготовка дат",
+    "sql": "CREATE TABLE tmp_dates(name TEXT,created TEXT)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Импорт dates.csv",
+    "rows_loaded": 3
+  },
+  {
+    "task": "9. DD.MM.YYYY → YYYY-MM-DD",
+    "sql": "CREATE TABLE dated_products AS SELECT name,substr(created,7,4)||'-'||substr(created,4,2)||'-'||substr(created,1,2) AS created FROM tmp_dates",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "9. Проверка дат",
+    "sql": "SELECT * FROM dated_products",
+    "columns": [
+      "name",
+      "created"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "2026-10-30"
+      ],
+      [
+        "Мыло",
+        "2025-02-01"
+      ],
+      [
+        "Молоко",
+        "2026-09-15"
+      ]
+    ]
+  },
+  {
+    "task": "10*. Исходные некорректные строки",
+    "sql": "CREATE TABLE tmp_invalid(name TEXT,price TEXT)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Импорт invalid.csv",
+    "rows_loaded": 4
+  },
+  {
+    "task": "10*. Поиск некорректной цены",
+    "sql": "SELECT * FROM tmp_invalid WHERE NULLIF(TRIM(price),'') IS NULL OR CAST(price AS REAL)<0 OR TRIM(price) GLOB '*[^0-9.-]*' OR TRIM(price) IN ('.','-','-.') OR LENGTH(TRIM(price))-LENGTH(REPLACE(TRIM(price),'.',''))>1 OR instr(substr(TRIM(price),2),'-')>0",
+    "columns": [
+      "name",
+      "price"
+    ],
+    "rows": [
+      [
+        "Отрицательный",
+        "-10"
+      ],
+      [
+        "Пустой",
+        ""
+      ],
+      [
+        "Текстовая цена",
+        "abc"
+      ]
+    ]
+  },
+  {
+    "task": "10*. Строки с отрицательной или NULL ценой после NULLIF/CAST",
+    "sql": "SELECT name,CAST(NULLIF(TRIM(price),'') AS REAL) AS price FROM tmp_invalid WHERE NULLIF(TRIM(price),'') IS NULL OR CAST(price AS REAL)<0",
+    "columns": [
+      "name",
+      "price"
+    ],
+    "rows": [
+      [
+        "Отрицательный",
+        -10.0
+      ],
+      [
+        "Пустой",
+        null
+      ]
+    ]
+  }
+]

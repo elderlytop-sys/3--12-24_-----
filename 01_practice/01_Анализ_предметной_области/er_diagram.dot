@@ -1,0 +1,18 @@
+digraph TireService {
+  graph [rankdir=TB, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.70", splines=polyline, fontname="Arial", labelloc="t", label="ER-диаграмма предметной области «Шиномонтаж»", fontsize=20];
+  node [shape=record, style="rounded,filled", fillcolor="#F4F6FF", color="#52617A", penwidth=1.4, fontname="Arial", fontsize=11, margin="0.12,0.08"];
+  edge [color="#52617A", penwidth=1.5, fontname="Arial", fontsize=10, dir=both, arrowtail=none, arrowhead=none];
+  client [label="{КЛИЕНТ|id (PK)\lФИО\lТелефон\lEmail\l}"];
+  vehicle [label="{АВТОМОБИЛЬ|id (PK)\lid_клиента (FK)\lГосномер\lМарка и модель\lГод выпуска\l}"];
+  employee [label="{СОТРУДНИК|id (PK)\lФИО\lДолжность\lТелефон\l}"];
+  work_order [label="{ЗАКАЗ-НАРЯД|id (PK)\lid_автомобиля (FK)\lid_сотрудника (FK)\lДата открытия\lСтатус\l}"];
+  service [label="{УСЛУГА|id (PK)\lНазвание\lОписание\lБазовая цена\l}"];
+  order_service [label="{СОСТАВ_ЗАКАЗА|id_заказа (PK, FK)\lid_услуги (PK, FK)\lКоличество\lЦена на момент заказа\l}", fillcolor="#FFF5E8"];
+  client -> vehicle [label="1 : N"];
+  vehicle -> work_order [label="1 : N"];
+  employee -> work_order [label="1 : N"];
+  work_order -> order_service [label="1 : N"];
+  service -> order_service [label="1 : N"];
+  note [shape=note, label="Связь «Заказ-наряд — Услуга»\nM : N реализована через\nпромежуточную таблицу", fillcolor="#FFFBEA", color="#B18A3B", fontsize=10];
+  order_service -> note [style=dashed, arrowhead=none, dir=none, color="#B18A3B"];
+}

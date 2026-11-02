@@ -1,0 +1,300 @@
+[
+  {
+    "task": "1. Товары с названиями категорий (INNER JOIN)",
+    "sql": "SELECT p.name AS product,c.name AS category FROM product p INNER JOIN category c ON p.category_id=c.id ORDER BY p.id",
+    "columns": [
+      "product",
+      "category"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "Еда"
+      ],
+      [
+        "Мыло",
+        "Быт"
+      ],
+      [
+        "Молоко",
+        "Еда"
+      ],
+      [
+        "Чай",
+        "Еда"
+      ]
+    ]
+  },
+  {
+    "task": "2. Все категории, включая категории без товаров (LEFT JOIN)",
+    "sql": "SELECT c.name AS category,p.name AS product FROM category c LEFT JOIN product p ON p.category_id=c.id ORDER BY c.id,p.id",
+    "columns": [
+      "category",
+      "product"
+    ],
+    "rows": [
+      [
+        "Еда",
+        "Хлеб"
+      ],
+      [
+        "Еда",
+        "Молоко"
+      ],
+      [
+        "Еда",
+        "Чай"
+      ],
+      [
+        "Быт",
+        "Мыло"
+      ],
+      [
+        "Напитки",
+        null
+      ]
+    ]
+  },
+  {
+    "task": "3. Товары без категории (LEFT JOIN + IS NULL)",
+    "sql": "SELECT p.id,p.name FROM product p LEFT JOIN category c ON p.category_id=c.id WHERE c.id IS NULL ORDER BY p.id",
+    "columns": [
+      "id",
+      "name"
+    ],
+    "rows": [
+      [
+        4,
+        "Сыр"
+      ]
+    ]
+  },
+  {
+    "task": "4. Количество товаров в каждой категории",
+    "sql": "SELECT c.name AS category,COUNT(p.id) AS product_count FROM category c LEFT JOIN product p ON p.category_id=c.id GROUP BY c.id,c.name ORDER BY c.id",
+    "columns": [
+      "category",
+      "product_count"
+    ],
+    "rows": [
+      [
+        "Еда",
+        3
+      ],
+      [
+        "Быт",
+        1
+      ],
+      [
+        "Напитки",
+        0
+      ]
+    ]
+  },
+  {
+    "task": "5. Товары и категории (FULL OUTER JOIN)",
+    "sql": "SELECT p.id AS product_id,p.name AS product,c.id AS category_id,c.name AS category FROM product p FULL OUTER JOIN category c ON p.category_id=c.id ORDER BY COALESCE(c.id,p.category_id),p.id",
+    "columns": [
+      "product_id",
+      "product",
+      "category_id",
+      "category"
+    ],
+    "rows": [
+      [
+        4,
+        "Сыр",
+        null,
+        null
+      ],
+      [
+        1,
+        "Хлеб",
+        1,
+        "Еда"
+      ],
+      [
+        3,
+        "Молоко",
+        1,
+        "Еда"
+      ],
+      [
+        5,
+        "Чай",
+        1,
+        "Еда"
+      ],
+      [
+        2,
+        "Мыло",
+        2,
+        "Быт"
+      ],
+      [
+        null,
+        null,
+        3,
+        "Напитки"
+      ]
+    ]
+  },
+  {
+    "task": "6. Категории без товаров",
+    "sql": "SELECT c.id,c.name FROM category c LEFT JOIN product p ON p.category_id=c.id WHERE p.id IS NULL ORDER BY c.id",
+    "columns": [
+      "id",
+      "name"
+    ],
+    "rows": [
+      [
+        3,
+        "Напитки"
+      ]
+    ]
+  },
+  {
+    "task": "7. Товар, категория и поставщик (три таблицы)",
+    "sql": "SELECT p.name AS product,c.name AS category,s.name AS supplier FROM product p LEFT JOIN category c ON c.id=p.category_id LEFT JOIN supplier s ON s.id=p.supplier_id ORDER BY p.id",
+    "columns": [
+      "product",
+      "category",
+      "supplier"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "Еда",
+        "ООО Продукты"
+      ],
+      [
+        "Мыло",
+        "Быт",
+        "ООО Хозтовары"
+      ],
+      [
+        "Молоко",
+        "Еда",
+        "ООО Продукты"
+      ],
+      [
+        "Сыр",
+        null,
+        "ООО Хозтовары"
+      ],
+      [
+        "Чай",
+        "Еда",
+        "ООО Продукты"
+      ]
+    ]
+  },
+  {
+    "task": "8. Товары, категория которых начинается на «Е»",
+    "sql": "SELECT p.name AS product,c.name AS category FROM product p JOIN category c ON c.id=p.category_id WHERE c.name LIKE 'Е%' ORDER BY p.id",
+    "columns": [
+      "product",
+      "category"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "Еда"
+      ],
+      [
+        "Молоко",
+        "Еда"
+      ],
+      [
+        "Чай",
+        "Еда"
+      ]
+    ]
+  },
+  {
+    "task": "9*. Пары товаров из одной категории (SELF JOIN)",
+    "sql": "SELECT p1.name AS product_1,p2.name AS product_2,c.name AS category FROM product p1 JOIN product p2 ON p1.category_id=p2.category_id AND p1.id<p2.id JOIN category c ON c.id=p1.category_id ORDER BY p1.id,p2.id",
+    "columns": [
+      "product_1",
+      "product_2",
+      "category"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "Молоко",
+        "Еда"
+      ],
+      [
+        "Хлеб",
+        "Чай",
+        "Еда"
+      ],
+      [
+        "Молоко",
+        "Чай",
+        "Еда"
+      ]
+    ]
+  },
+  {
+    "task": "Поиск ошибки. Число строк при JOIN без ON",
+    "sql": "SELECT COUNT(*) AS rows_without_on FROM product p JOIN category c",
+    "columns": [
+      "rows_without_on"
+    ],
+    "rows": [
+      [
+        15
+      ]
+    ]
+  },
+  {
+    "task": "Предсказание результата LEFT JOIN",
+    "sql": "WITH product(name,category_id) AS (VALUES ('Хлеб',1),('Сыр',NULL)), category(id,name) AS (VALUES (1,'Еда'),(2,'Напитки')) SELECT p.name,c.name AS category FROM product p LEFT JOIN category c ON p.category_id=c.id ORDER BY p.name",
+    "columns": [
+      "name",
+      "category"
+    ],
+    "rows": [
+      [
+        "Сыр",
+        null
+      ],
+      [
+        "Хлеб",
+        "Еда"
+      ]
+    ]
+  },
+  {
+    "task": "Продвинутый случай. RIGHT JOIN через LEFT JOIN",
+    "sql": "SELECT p.name AS product,c.name AS category FROM category c LEFT JOIN product p ON p.category_id=c.id ORDER BY c.id,p.id",
+    "columns": [
+      "product",
+      "category"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        "Еда"
+      ],
+      [
+        "Молоко",
+        "Еда"
+      ],
+      [
+        "Чай",
+        "Еда"
+      ],
+      [
+        "Мыло",
+        "Быт"
+      ],
+      [
+        null,
+        "Напитки"
+      ]
+    ]
+  }
+]

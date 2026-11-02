@@ -1,0 +1,23 @@
+digraph Normalization {
+ graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.75", splines=polyline, fontname="Arial", labelloc="t", label="Схемы после приведения к 1НФ, 2НФ и 3НФ", fontsize=20];
+ node [shape=record, style="rounded,filled", fillcolor="#F4F6FF", color="#52617A", penwidth=1.2, fontname="Arial", fontsize=10, margin="0.10,0.06"];
+ edge [color="#52617A", penwidth=1.3, fontname="Arial", fontsize=9, dir=both, arrowhead=none, arrowtail=none];
+ subgraph cluster_1 { label="Задача 1 — 1НФ"; color="#8AA3C7"; style="rounded";
+  s1 [label="{STUDENT|id (PK)\lfio\l}"];
+  p1 [label="{STUDENT_PHONE|student_id (PK, FK)\lphone (PK)\l}"];
+  d1 [label="{DISCIPLINE|id (PK)\lname\l}"];
+  sd1 [label="{STUDENT_DISCIPLINE|student_id (PK, FK)\ldiscipline_id (PK, FK)\l}"];
+  s1 -> p1 [label="1:N"]; s1 -> sd1 [label="1:N"]; d1 -> sd1 [label="1:N"];
+ }
+ subgraph cluster_2 { label="Задача 2 — 2НФ"; color="#8AA3C7"; style="rounded";
+  s2 [label="{STUDENT|id (PK)\lfio\l}"];
+  d2 [label="{DISCIPLINE|id (PK)\lname\l}"];
+  g2 [label="{GRADE|student_id (PK, FK)\ldiscipline_id (PK, FK)\lgrade\l}", fillcolor="#FFF5E8"];
+  s2 -> g2 [label="1:N"]; d2 -> g2 [label="1:N"];
+ }
+ subgraph cluster_3 { label="Задача 3 — 3НФ"; color="#8AA3C7"; style="rounded";
+  s3 [label="{STUDENT|id (PK)\lfio\lgroup_id (FK)\l}"];
+  gr3 [label="{GROUP|id (PK)\lname\lfaculty\l}"];
+  gr3 -> s3 [label="1:N"];
+ }
+}

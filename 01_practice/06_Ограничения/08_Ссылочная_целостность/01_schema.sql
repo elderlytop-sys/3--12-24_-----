@@ -1,0 +1,12 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE client(id INTEGER PRIMARY KEY,name TEXT NOT NULL);
+CREATE TABLE orders(id INTEGER PRIMARY KEY,client_id INTEGER NOT NULL REFERENCES client(id) ON DELETE CASCADE);
+INSERT INTO client VALUES(1,'Иванов'),(2,'Петров');
+INSERT INTO orders VALUES(1,1),(2,1);
+CREATE TABLE category(id INTEGER PRIMARY KEY,name TEXT);
+CREATE TABLE product(id INTEGER PRIMARY KEY,name TEXT,category_id INTEGER REFERENCES category(id) ON DELETE SET NULL);
+INSERT INTO category VALUES(1,'Еда');
+INSERT INTO product VALUES(1,'Хлеб',1),(2,'Молоко',1);
+CREATE TABLE order_product(order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,product_id INTEGER REFERENCES product(id) ON DELETE RESTRICT,quantity INTEGER NOT NULL CHECK(quantity>0),PRIMARY KEY(order_id,product_id));
+CREATE TABLE employee(id INTEGER PRIMARY KEY,name TEXT NOT NULL,manager_id INTEGER REFERENCES employee(id) ON DELETE SET NULL);
+INSERT INTO employee VALUES(1,'Директор',NULL),(2,'Мастер',1),(3,'Стажёр',2);

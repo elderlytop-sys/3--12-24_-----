@@ -1,0 +1,110 @@
+[
+  {
+    "task": "1–5. Три студента",
+    "sql": "SELECT * FROM student",
+    "columns": [
+      "id",
+      "fio",
+      "birth",
+      "avg"
+    ],
+    "rows": [
+      [
+        1,
+        "Иванов Иван Иванович",
+        "2005-01-15",
+        4.5
+      ],
+      [
+        2,
+        "Петров Пётр Петрович",
+        "2004-11-02",
+        3.8
+      ],
+      [
+        3,
+        "Сидоров Сергей Сергеевич",
+        "2005-06-20",
+        4.9
+      ]
+    ]
+  },
+  {
+    "task": "6–7. Преподаватели со стажем более 5 лет",
+    "sql": "SELECT * FROM teacher WHERE experience>5",
+    "columns": [
+      "id",
+      "fio",
+      "subject",
+      "experience"
+    ],
+    "rows": [
+      [
+        1,
+        "Орлова Анна",
+        "Математика",
+        12
+      ],
+      [
+        3,
+        "Смирнова Ирина",
+        "Физика",
+        8
+      ],
+      [
+        5,
+        "Кузнецова Елена",
+        "Русский язык",
+        20
+      ]
+    ]
+  },
+  {
+    "task": "8. Проверка BLOB",
+    "sql": "SELECT file_name,typeof(content) AS storage_type,length(content) AS bytes,hex(content) AS hex_value FROM attachment",
+    "columns": [
+      "file_name",
+      "storage_type",
+      "bytes",
+      "hex_value"
+    ],
+    "rows": [
+      [
+        "sample.bin",
+        "blob",
+        4,
+        "010203FF"
+      ]
+    ]
+  },
+  {
+    "task": "9*. Дата по умолчанию",
+    "sql": "SELECT *,created=date('now') AS matches_today FROM event",
+    "columns": [
+      "id",
+      "title",
+      "created",
+      "matches_today"
+    ],
+    "rows": [
+      [
+        1,
+        "Создание базы",
+        "2026-10-30",
+        1
+      ]
+    ]
+  },
+  {
+    "task": "Предсказание: версия SQLite",
+    "sql": "SELECT sqlite_version() AS version",
+    "columns": [
+      "version"
+    ],
+    "rows": [
+      [
+        "3.53.1"
+      ]
+    ]
+  }
+]

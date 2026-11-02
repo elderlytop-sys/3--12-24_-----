@@ -1,0 +1,164 @@
+[
+  {
+    "task": "План до индексов",
+    "sql": "EXPLAIN QUERY PLAN SELECT * FROM product WHERE price>100",
+    "columns": [
+      "id",
+      "parent",
+      "notused",
+      "detail"
+    ],
+    "rows": [
+      [
+        2,
+        0,
+        216,
+        "SCAN product"
+      ]
+    ]
+  },
+  {
+    "task": "1. Индекс цены",
+    "sql": "CREATE INDEX idx_product_price ON product(price)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "2. Индекс имени",
+    "sql": "CREATE INDEX idx_product_name ON product(name)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "3. Составной индекс",
+    "sql": "CREATE INDEX idx_product_cat_price ON product(category_id,price)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "4. План по цене",
+    "sql": "EXPLAIN QUERY PLAN SELECT * FROM product WHERE price>100",
+    "columns": [
+      "id",
+      "parent",
+      "notused",
+      "detail"
+    ],
+    "rows": [
+      [
+        3,
+        0,
+        203,
+        "SEARCH product USING INDEX idx_product_price (price>?)"
+      ]
+    ]
+  },
+  {
+    "task": "4. План составного индекса",
+    "sql": "EXPLAIN QUERY PLAN SELECT * FROM product WHERE category_id=1 AND price>100",
+    "columns": [
+      "id",
+      "parent",
+      "notused",
+      "detail"
+    ],
+    "rows": [
+      [
+        3,
+        0,
+        50,
+        "SEARCH product USING INDEX idx_product_cat_price (category_id=? AND price>?)"
+      ]
+    ]
+  },
+  {
+    "task": "5. Удаление индекса имени",
+    "sql": "DROP INDEX idx_product_name",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "6. Уникальный индекс",
+    "sql": "CREATE UNIQUE INDEX idx_product_name_unique ON product(name)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "7. Индекс имени и категории",
+    "sql": "CREATE INDEX idx_product_name_cat ON product(name,category_id)",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "9*. Индекс выражения",
+    "sql": "CREATE INDEX idx_product_lower_name ON product(LOWER(name))",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "9*. Проверка плана выражения",
+    "sql": "EXPLAIN QUERY PLAN SELECT * FROM product WHERE LOWER(name)=LOWER('Хлеб')",
+    "columns": [
+      "id",
+      "parent",
+      "notused",
+      "detail"
+    ],
+    "rows": [
+      [
+        3,
+        0,
+        61,
+        "SEARCH product USING INDEX idx_product_lower_name (<expr>=?)"
+      ]
+    ]
+  },
+  {
+    "task": "Итоговый список индексов",
+    "sql": "PRAGMA index_list(product)",
+    "columns": [
+      "seq",
+      "name",
+      "unique",
+      "origin",
+      "partial"
+    ],
+    "rows": [
+      [
+        0,
+        "idx_product_lower_name",
+        0,
+        "c",
+        0
+      ],
+      [
+        1,
+        "idx_product_name_cat",
+        0,
+        "c",
+        0
+      ],
+      [
+        2,
+        "idx_product_name_unique",
+        1,
+        "c",
+        0
+      ],
+      [
+        3,
+        "idx_product_cat_price",
+        0,
+        "c",
+        0
+      ],
+      [
+        4,
+        "idx_product_price",
+        0,
+        "c",
+        0
+      ]
+    ]
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "task": "3. Заказ с отсутствующим клиентом",
+    "sql": "INSERT INTO orders VALUES(3,999)",
+    "status": "expected_error",
+    "message": "FOREIGN KEY constraint failed"
+  },
+  {
+    "task": "4. CASCADE: удалить клиента 1",
+    "sql": "DELETE FROM client WHERE id=1",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "4. Заказы удалились",
+    "sql": "SELECT COUNT(*) FROM orders",
+    "rows": [
+      [
+        0
+      ]
+    ],
+    "status": "ok"
+  },
+  {
+    "task": "5. Создать таблицу с RESTRICT",
+    "sql": "CREATE TABLE orders_new(id INTEGER PRIMARY KEY,client_id INTEGER NOT NULL REFERENCES client(id) ON DELETE RESTRICT)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "5. Копирование",
+    "sql": "INSERT INTO orders_new SELECT * FROM orders",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "5. Удалить старую",
+    "sql": "DROP TABLE orders",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "5. Переименование",
+    "sql": "ALTER TABLE orders_new RENAME TO orders",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "5. Заказ существующего клиента",
+    "sql": "INSERT INTO orders VALUES(3,2)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "5. Отсутствующий клиент при RESTRICT",
+    "sql": "INSERT INTO orders VALUES(4,999)",
+    "status": "expected_error",
+    "message": "FOREIGN KEY constraint failed"
+  },
+  {
+    "task": "5. RESTRICT запрещает удалить клиента",
+    "sql": "DELETE FROM client WHERE id=2",
+    "status": "expected_error",
+    "message": "FOREIGN KEY constraint failed"
+  },
+  {
+    "task": "5. Данные сохранились",
+    "sql": "SELECT * FROM orders",
+    "rows": [
+      [
+        3,
+        2
+      ]
+    ],
+    "status": "ok"
+  },
+  {
+    "task": "6. SET NULL: удалить категорию",
+    "sql": "DELETE FROM category WHERE id=1",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "6. Проверка",
+    "sql": "SELECT * FROM product",
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        null
+      ],
+      [
+        2,
+        "Молоко",
+        null
+      ]
+    ],
+    "status": "ok"
+  },
+  {
+    "task": "7–8. Позиция заказа",
+    "sql": "INSERT INTO order_product VALUES(3,1,2)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "7. Второй товар того же заказа",
+    "sql": "INSERT INTO order_product VALUES(3,2,1)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "7. Второй заказ",
+    "sql": "INSERT INTO orders VALUES(4,2)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "7. Тот же товар в другом заказе",
+    "sql": "INSERT INTO order_product VALUES(4,1,1)",
+    "rows": [],
+    "status": "ok"
+  },
+  {
+    "task": "8. Дубликат составного ключа",
+    "sql": "INSERT INTO order_product VALUES(3,1,5)",
+    "status": "expected_error",
+    "message": "UNIQUE constraint failed: order_product.order_id, order_product.product_id"
+  },
+  {
+    "task": "7–8. Содержимое связи M:N",
+    "sql": "SELECT * FROM order_product ORDER BY order_id,product_id",
+    "rows": [
+      [
+        3,
+        1,
+        2
+      ],
+      [
+        3,
+        2,
+        1
+      ],
+      [
+        4,
+        1,
+        1
+      ]
+    ],
+    "status": "ok"
+  },
+  {
+    "task": "9*. Иерархия сотрудников",
+    "sql": "SELECT e.name,m.name AS manager FROM employee e LEFT JOIN employee m ON m.id=e.manager_id ORDER BY e.id",
+    "rows": [
+      [
+        "Директор",
+        null
+      ],
+      [
+        "Мастер",
+        "Директор"
+      ],
+      [
+        "Стажёр",
+        "Мастер"
+      ]
+    ],
+    "status": "ok"
+  },
+  {
+    "task": "Проверка внешних ключей",
+    "sql": "PRAGMA foreign_key_check",
+    "rows": [],
+    "status": "ok"
+  }
+]

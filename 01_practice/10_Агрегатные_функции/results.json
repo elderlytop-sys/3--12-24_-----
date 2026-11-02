@@ -1,0 +1,198 @@
+[
+  {
+    "task": "1. Всего товаров",
+    "sql": "SELECT COUNT(*) AS total FROM product",
+    "columns": [
+      "total"
+    ],
+    "rows": [
+      [
+        10
+      ]
+    ]
+  },
+  {
+    "task": "2. Средняя цена",
+    "sql": "SELECT AVG(price) AS avg_price FROM product",
+    "columns": [
+      "avg_price"
+    ],
+    "rows": [
+      [
+        3316.0
+      ]
+    ]
+  },
+  {
+    "task": "3. Количество по категориям",
+    "sql": "SELECT category_id,COUNT(*) AS total FROM product GROUP BY category_id",
+    "columns": [
+      "category_id",
+      "total"
+    ],
+    "rows": [
+      [
+        null,
+        1
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ]
+    ]
+  },
+  {
+    "task": "4. Сумма по категориям",
+    "sql": "SELECT category_id,SUM(price) AS sum_price FROM product GROUP BY category_id",
+    "columns": [
+      "category_id",
+      "sum_price"
+    ],
+    "rows": [
+      [
+        null,
+        200.0
+      ],
+      [
+        1,
+        630.0
+      ],
+      [
+        2,
+        330.0
+      ],
+      [
+        3,
+        32000.0
+      ]
+    ]
+  },
+  {
+    "task": "5. Больше двух товаров",
+    "sql": "SELECT category_id,COUNT(*) AS total FROM product GROUP BY category_id HAVING COUNT(*)>2",
+    "columns": [
+      "category_id",
+      "total"
+    ],
+    "rows": [
+      [
+        1,
+        5
+      ]
+    ]
+  },
+  {
+    "task": "6. Максимум и минимум",
+    "sql": "SELECT MAX(price) AS maximum,MIN(price) AS minimum FROM product",
+    "columns": [
+      "maximum",
+      "minimum"
+    ],
+    "rows": [
+      [
+        30000.0,
+        30.0
+      ]
+    ]
+  },
+  {
+    "task": "7. Средняя выше 100",
+    "sql": "SELECT category_id,AVG(price) AS avg_price FROM product GROUP BY category_id HAVING AVG(price)>100",
+    "columns": [
+      "category_id",
+      "avg_price"
+    ],
+    "rows": [
+      [
+        null,
+        200.0
+      ],
+      [
+        1,
+        126.0
+      ],
+      [
+        2,
+        165.0
+      ],
+      [
+        3,
+        16000.0
+      ]
+    ]
+  },
+  {
+    "task": "8. Дороже средней",
+    "sql": "SELECT * FROM product WHERE price>(SELECT AVG(price) FROM product)",
+    "columns": [
+      "id",
+      "name",
+      "price",
+      "category_id"
+    ],
+    "rows": [
+      [
+        8,
+        "Холодильник",
+        30000.0,
+        3
+      ]
+    ]
+  },
+  {
+    "task": "9*. Сводка по средней цене",
+    "sql": "SELECT category_id,COUNT(*) AS total,AVG(price) AS avg_price,MAX(price) AS max_price FROM product GROUP BY category_id ORDER BY avg_price DESC",
+    "columns": [
+      "category_id",
+      "total",
+      "avg_price",
+      "max_price"
+    ],
+    "rows": [
+      [
+        3,
+        2,
+        16000.0,
+        30000.0
+      ],
+      [
+        null,
+        1,
+        200.0,
+        200.0
+      ],
+      [
+        2,
+        2,
+        165.0,
+        250.0
+      ],
+      [
+        1,
+        5,
+        126.0,
+        350.0
+      ]
+    ]
+  },
+  {
+    "task": "Продвинутый случай",
+    "sql": "SELECT COUNT(DISTINCT category_id) AS categories_with_products FROM product",
+    "columns": [
+      "categories_with_products"
+    ],
+    "rows": [
+      [
+        3
+      ]
+    ]
+  }
+]

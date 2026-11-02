@@ -1,0 +1,320 @@
+[
+  {
+    "task": "3. CASE: метка «дорого/дёшево»",
+    "sql": "SELECT name,price,CASE WHEN price IS NULL THEN 'не указана' WHEN price>100 THEN 'дорого' ELSE 'дёшево' END AS price_label FROM product ORDER BY id",
+    "columns": [
+      "name",
+      "price",
+      "price_label"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        40.0,
+        "дёшево"
+      ],
+      [
+        "Мыло",
+        80.0,
+        "дёшево"
+      ],
+      [
+        "Ноутбук",
+        150.0,
+        "дорого"
+      ],
+      [
+        "Конфеты",
+        30.0,
+        "дёшево"
+      ],
+      [
+        "Кофе",
+        100.0,
+        "дёшево"
+      ],
+      [
+        "Товар без цены",
+        null,
+        "не указана"
+      ],
+      [
+        "Бесплатный образец",
+        0.0,
+        "дёшево"
+      ],
+      [
+        "Товар по умолчанию",
+        0.0,
+        "дёшево"
+      ]
+    ]
+  },
+  {
+    "task": "4. COALESCE: NULL в category_id заменён на 0",
+    "sql": "SELECT name,COALESCE(category_id,0) AS category_id FROM product ORDER BY id",
+    "columns": [
+      "name",
+      "category_id"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        1
+      ],
+      [
+        "Мыло",
+        2
+      ],
+      [
+        "Ноутбук",
+        3
+      ],
+      [
+        "Конфеты",
+        1
+      ],
+      [
+        "Кофе",
+        1
+      ],
+      [
+        "Товар без цены",
+        0
+      ],
+      [
+        "Бесплатный образец",
+        2
+      ],
+      [
+        "Товар по умолчанию",
+        2
+      ]
+    ]
+  },
+  {
+    "task": "5. NULLIF: защита от деления на ноль",
+    "sql": "SELECT name,1000/NULLIF(price,0) AS ratio FROM product ORDER BY id",
+    "columns": [
+      "name",
+      "ratio"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        25.0
+      ],
+      [
+        "Мыло",
+        12.5
+      ],
+      [
+        "Ноутбук",
+        6.666666666666667
+      ],
+      [
+        "Конфеты",
+        33.333333333333336
+      ],
+      [
+        "Кофе",
+        10.0
+      ],
+      [
+        "Товар без цены",
+        null
+      ],
+      [
+        "Бесплатный образец",
+        null
+      ],
+      [
+        "Товар по умолчанию",
+        null
+      ]
+    ]
+  },
+  {
+    "task": "7. CASE с тремя ценовыми категориями",
+    "sql": "SELECT name,price,CASE WHEN price<50 THEN 'дёшево' WHEN price BETWEEN 50 AND 100 THEN 'средне' WHEN price>100 THEN 'дорого' ELSE 'не указана' END AS price_category FROM product ORDER BY id",
+    "columns": [
+      "name",
+      "price",
+      "price_category"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        40.0,
+        "дёшево"
+      ],
+      [
+        "Мыло",
+        80.0,
+        "средне"
+      ],
+      [
+        "Ноутбук",
+        150.0,
+        "дорого"
+      ],
+      [
+        "Конфеты",
+        30.0,
+        "дёшево"
+      ],
+      [
+        "Кофе",
+        100.0,
+        "средне"
+      ],
+      [
+        "Товар без цены",
+        null,
+        "не указана"
+      ],
+      [
+        "Бесплатный образец",
+        0.0,
+        "дёшево"
+      ],
+      [
+        "Товар по умолчанию",
+        0.0,
+        "дёшево"
+      ]
+    ]
+  },
+  {
+    "task": "8. COALESCE с двумя столбцами",
+    "sql": "SELECT name,COALESCE(price,0)+COALESCE(discount,0) AS price_plus_discount FROM product ORDER BY id",
+    "columns": [
+      "name",
+      "price_plus_discount"
+    ],
+    "rows": [
+      [
+        "Хлеб",
+        45.0
+      ],
+      [
+        "Мыло",
+        80.0
+      ],
+      [
+        "Ноутбук",
+        170.0
+      ],
+      [
+        "Конфеты",
+        30.0
+      ],
+      [
+        "Кофе",
+        100.0
+      ],
+      [
+        "Товар без цены",
+        0
+      ],
+      [
+        "Бесплатный образец",
+        0.0
+      ],
+      [
+        "Товар по умолчанию",
+        0.0
+      ]
+    ]
+  },
+  {
+    "task": "9*. Сортировка через CASE: дорого, средне, дёшево",
+    "sql": "SELECT name,price,CASE WHEN price>100 THEN 'дорого' WHEN price BETWEEN 50 AND 100 THEN 'средне' WHEN price<50 THEN 'дёшево' ELSE 'не указана' END AS price_category FROM product ORDER BY CASE WHEN price>100 THEN 1 WHEN price BETWEEN 50 AND 100 THEN 2 WHEN price<50 THEN 3 ELSE 4 END,price DESC",
+    "columns": [
+      "name",
+      "price",
+      "price_category"
+    ],
+    "rows": [
+      [
+        "Ноутбук",
+        150.0,
+        "дорого"
+      ],
+      [
+        "Кофе",
+        100.0,
+        "средне"
+      ],
+      [
+        "Мыло",
+        80.0,
+        "средне"
+      ],
+      [
+        "Хлеб",
+        40.0,
+        "дёшево"
+      ],
+      [
+        "Конфеты",
+        30.0,
+        "дёшево"
+      ],
+      [
+        "Бесплатный образец",
+        0.0,
+        "дёшево"
+      ],
+      [
+        "Товар по умолчанию",
+        0.0,
+        "дёшево"
+      ],
+      [
+        "Товар без цены",
+        null,
+        "не указана"
+      ]
+    ]
+  },
+  {
+    "task": "Продвинутый случай. CASE в UPDATE",
+    "sql": "UPDATE price_fix_demo SET price=CASE WHEN price<0 THEN 0 ELSE price END",
+    "columns": [],
+    "rows": []
+  },
+  {
+    "task": "Результат CASE в UPDATE",
+    "sql": "SELECT id,name,price FROM price_fix_demo ORDER BY id",
+    "columns": [
+      "id",
+      "name",
+      "price"
+    ],
+    "rows": [
+      [
+        1,
+        "Ошибка ввода",
+        0.0
+      ],
+      [
+        2,
+        "Корректная цена",
+        50.0
+      ]
+    ]
+  },
+  {
+    "task": "Предсказание результата COALESCE(NULL,NULL,5)",
+    "sql": "SELECT COALESCE(NULL,NULL,5) AS result",
+    "columns": [
+      "result"
+    ],
+    "rows": [
+      [
+        5
+      ]
+    ]
+  }
+]

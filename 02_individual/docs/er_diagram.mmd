@@ -1,0 +1,8 @@
+erDiagram
+    CUSTOMERS ||--o{ DEVICES : owns
+    DEVICE_TYPES ||--o{ DEVICES : classifies
+    DEVICES ||--o{ REPAIR_ORDERS : has
+    EMPLOYEES ||--o{ REPAIR_ORDERS : performs
+    REPAIR_STATUSES ||--o{ REPAIR_ORDERS : tracks
+    REPAIR_ORDERS ||--o{ ORDER_SERVICES : contains
+    SERVICES ||--o{ ORDER_SERVICES : included_in

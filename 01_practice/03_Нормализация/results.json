@@ -1,0 +1,340 @@
+[
+  {
+    "task": "1. Студенты и телефоны (1НФ)",
+    "sql": "SELECT s.id,s.fio,p.phone FROM nf1_student s JOIN nf1_student_phone p ON p.student_id=s.id ORDER BY s.id,p.phone",
+    "columns": [
+      "id",
+      "fio",
+      "phone"
+    ],
+    "rows": [
+      [
+        1,
+        "Иванов И.И.",
+        "111-22-33"
+      ],
+      [
+        1,
+        "Иванов И.И.",
+        "444-55-66"
+      ],
+      [
+        2,
+        "Петров П.П.",
+        "555-66-77"
+      ],
+      [
+        3,
+        "Сидоров С.С.",
+        "123-45-67"
+      ],
+      [
+        3,
+        "Сидоров С.С.",
+        "888-99-00"
+      ]
+    ]
+  },
+  {
+    "task": "1. Студенты и дисциплины (1НФ)",
+    "sql": "SELECT s.fio,d.name AS discipline FROM nf1_student_discipline sd JOIN nf1_student s ON s.id=sd.student_id JOIN nf1_discipline d ON d.id=sd.discipline_id ORDER BY s.id,d.id",
+    "columns": [
+      "fio",
+      "discipline"
+    ],
+    "rows": [
+      [
+        "Иванов И.И.",
+        "Математика"
+      ],
+      [
+        "Иванов И.И.",
+        "Физика"
+      ],
+      [
+        "Петров П.П.",
+        "Математика"
+      ],
+      [
+        "Сидоров С.С.",
+        "Физика"
+      ],
+      [
+        "Сидоров С.С.",
+        "Химия"
+      ],
+      [
+        "Сидоров С.С.",
+        "Биология"
+      ]
+    ]
+  },
+  {
+    "task": "2. Оценки после приведения к 2НФ",
+    "sql": "SELECT s.fio,d.name AS discipline,g.grade FROM nf2_grade g JOIN nf2_student s ON s.id=g.student_id JOIN nf2_discipline d ON d.id=g.discipline_id ORDER BY s.id,d.id",
+    "columns": [
+      "fio",
+      "discipline",
+      "grade"
+    ],
+    "rows": [
+      [
+        "Иванов",
+        "Математика",
+        5
+      ],
+      [
+        "Иванов",
+        "Физика",
+        4
+      ],
+      [
+        "Петров",
+        "Математика",
+        3
+      ],
+      [
+        "Сидоров",
+        "Физика",
+        5
+      ]
+    ]
+  },
+  {
+    "task": "3. Студенты и группы после приведения к 3НФ",
+    "sql": "SELECT s.id,s.fio,g.name AS group_name,g.faculty FROM nf3_student s JOIN nf3_group g ON g.id=s.group_id ORDER BY s.id",
+    "columns": [
+      "id",
+      "fio",
+      "group_name",
+      "faculty"
+    ],
+    "rows": [
+      [
+        1,
+        "Иванов",
+        "ИС-31",
+        "Информатики"
+      ],
+      [
+        2,
+        "Петров",
+        "ИС-31",
+        "Информатики"
+      ],
+      [
+        3,
+        "Сидоров",
+        "ЭК-21",
+        "Экономики"
+      ],
+      [
+        4,
+        "Кузнецов",
+        "ЭК-21",
+        "Экономики"
+      ],
+      [
+        5,
+        "Смирнов",
+        "ИС-32",
+        "Информатики"
+      ]
+    ]
+  },
+  {
+    "task": "6. Заказы и клиенты",
+    "sql": "SELECT o.id,o.order_date,c.fio,c.phone FROM nf3_order o JOIN nf3_customer c ON c.id=o.customer_id ORDER BY o.id",
+    "columns": [
+      "id",
+      "order_date",
+      "fio",
+      "phone"
+    ],
+    "rows": [
+      [
+        1,
+        "01.02",
+        "Иванов",
+        "111"
+      ],
+      [
+        2,
+        "02.02",
+        "Петров",
+        "444"
+      ],
+      [
+        3,
+        "03.02",
+        "Иванов",
+        "111"
+      ]
+    ]
+  },
+  {
+    "task": "6. Состав заказов",
+    "sql": "SELECT i.order_id,p.name AS product,p.price,i.quantity FROM nf3_order_item i JOIN nf3_product p ON p.id=i.product_id ORDER BY i.order_id,p.id",
+    "columns": [
+      "order_id",
+      "product",
+      "price",
+      "quantity"
+    ],
+    "rows": [
+      [
+        1,
+        "Хлеб",
+        40.0,
+        2
+      ],
+      [
+        1,
+        "Молоко",
+        60.0,
+        1
+      ],
+      [
+        2,
+        "Хлеб",
+        40.0,
+        3
+      ],
+      [
+        3,
+        "Мыло",
+        80.0,
+        1
+      ]
+    ]
+  },
+  {
+    "task": "7. Сотрудники и отделы",
+    "sql": "SELECT e.fio,d.name AS department,d.manager_name FROM nf3_employee e JOIN nf3_department d ON d.id=e.department_id ORDER BY e.id",
+    "columns": [
+      "fio",
+      "department",
+      "manager_name"
+    ],
+    "rows": [
+      [
+        "Иванов",
+        "Бухгалтерия",
+        "Петров"
+      ],
+      [
+        "Сидоров",
+        "Бухгалтерия",
+        "Петров"
+      ],
+      [
+        "Кузнецов",
+        "IT",
+        "Смирнов"
+      ],
+      [
+        "Морозов",
+        "IT",
+        "Смирнов"
+      ]
+    ]
+  },
+  {
+    "task": "8. Нормализованное расписание",
+    "sql": "SELECT l.day,l.lesson_time,g.name AS group_name,s.name AS subject,t.fio AS teacher,r.room_number AS room FROM timetable_lesson l JOIN timetable_group g ON g.id=l.group_id JOIN timetable_subject s ON s.id=l.subject_id JOIN timetable_teacher t ON t.id=l.teacher_id JOIN timetable_room r ON r.id=l.room_id ORDER BY CASE l.day WHEN 'Пн' THEN 1 WHEN 'Вт' THEN 2 ELSE 3 END,l.lesson_time,g.id",
+    "columns": [
+      "day",
+      "lesson_time",
+      "group_name",
+      "subject",
+      "teacher",
+      "room"
+    ],
+    "rows": [
+      [
+        "Пн",
+        "10:30",
+        "ИС-31",
+        "Физика",
+        "Сидоров",
+        "202"
+      ],
+      [
+        "Пн",
+        "9:00",
+        "ИС-31",
+        "Математика",
+        "Петров",
+        "101"
+      ],
+      [
+        "Вт",
+        "9:00",
+        "ИС-31",
+        "Математика",
+        "Петров",
+        "101"
+      ],
+      [
+        "Вт",
+        "9:00",
+        "ЭК-21",
+        "Экономика",
+        "Кузнецов",
+        "303"
+      ],
+      [
+        "Ср",
+        "9:00",
+        "ИС-31",
+        "Физика",
+        "Сидоров",
+        "202"
+      ]
+    ]
+  },
+  {
+    "task": "BCNF. Студенты и предметы",
+    "sql": "SELECT student,subject FROM bcnf_student_subject ORDER BY student,subject",
+    "columns": [
+      "student",
+      "subject"
+    ],
+    "rows": [
+      [
+        "Иванов",
+        "Математика"
+      ],
+      [
+        "Иванов",
+        "Физика"
+      ],
+      [
+        "Петров",
+        "Математика"
+      ],
+      [
+        "Сидоров",
+        "Физика"
+      ]
+    ]
+  },
+  {
+    "task": "BCNF. Преподаватели и предметы",
+    "sql": "SELECT teacher,subject FROM bcnf_teacher_subject ORDER BY teacher",
+    "columns": [
+      "teacher",
+      "subject"
+    ],
+    "rows": [
+      [
+        "Петров",
+        "Математика"
+      ],
+      [
+        "Сидоров",
+        "Физика"
+      ]
+    ]
+  }
+]
